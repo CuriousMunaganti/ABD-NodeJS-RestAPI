@@ -4,7 +4,9 @@
   "description": "RESTAPI using nodejs for Advanced bigdata and indexing techniques",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "start": "node server.js"
   },
   "keywords": [
     "NodeJS",
@@ -17,6 +19,9 @@
   "author": "Venkat Pavan Munaganti",
   "license": "ISC",
   "devDependencies": {
+    "chai": "^4.3.10",
+    "chai-http": "^4.4.0",
+    "mocha": "^10.2.0",
     "nodemon": "^3.0.1"
   },
   "dependencies": {

@@ -5,7 +5,7 @@ const customFormatter = printf(({ level, message, timestamp, ...metadata }) => {
   let formattedMetadata = '';
 
   if (metadata && Object.keys(metadata).length > 0) {
-    formattedMetadata = `\n${JSON.stringify(metadata, null, 2)}`; // Prettify the JSON
+    formattedMetadata = `\n${JSON.stringify(metadata, null, 2)}`;
   }
 
   const msg = `${timestamp} [${level}] : ${message}${formattedMetadata}`;
