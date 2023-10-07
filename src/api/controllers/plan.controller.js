@@ -16,11 +16,14 @@ const getAllPlan = async (req, res) => {
 
 const getPlan = async (req, res) => {
     logger.info(`Handling ${req.method} for ${req.originalUrl}`)
+    const key=req.params.id
     try{
-        const data = await redis.getPlan()
-        res.status(200).json({
-            message: data
-        })
+        const data = await redis.getPlan(key)
+        if(data){
+            res.status(200).json(data)
+        }else{
+            res.status(404).send()
+        }
     }catch(error){
         res.status(503)
     }
@@ -28,11 +31,12 @@ const getPlan = async (req, res) => {
 
 const setPlan = async (req, res) => {
     logger.info(`Handling ${req.method} for ${req.originalUrl}`)
+    logger.info(`Payload is, `, req.body)
     try{
-        const data = await redis.setPlan()
-        res.status(200).json({
-            message: data
-        })
+        const data = await redis.setPlan(req.body.objectId, req.body)
+        if(data === "OK"){
+            res.status(201).json(req.body)
+        }
     }catch(error){
         res.status(503)
     }
@@ -40,11 +44,14 @@ const setPlan = async (req, res) => {
 
 const deletPlan = async (req, res) => {
     logger.info(`Handling ${req.method} for ${req.originalUrl}`)
+    const key=req.params.id
     try{
-        const data = await redis.deletePlan()
-        res.status(200).json({
-            message: data
-        })
+        const data = await redis.deletePlan(key)
+        if(data){
+            res.status(200).json(data)
+        }else{
+            res.status(404).send()
+        }
     }catch(error){
         res.status(503)
     }

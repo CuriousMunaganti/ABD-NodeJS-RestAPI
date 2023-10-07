@@ -21,7 +21,7 @@ const logger = createLogger({
     customFormatter
   ),
   transports: [
-    new transports.Console({ level: 'info' })
+    new transports.Console({ level: 'info' }),
   ]
 });
 
