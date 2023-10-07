@@ -2,11 +2,14 @@ const { createLogger, format, transports } = require('winston');
 const { combine, splat, timestamp, printf } = format;
 
 const customFormatter = printf(({ level, message, timestamp, ...metadata }) => {
-  let msg = `${timestamp} [${level}] : ${message} `
-  if (metadata) {
-    msg += JSON.stringify(metadata)
+  let formattedMetadata = '';
+
+  if (metadata && Object.keys(metadata).length > 0) {
+    formattedMetadata = `\n${JSON.stringify(metadata, null, 2)}`; // Prettify the JSON
   }
-  return msg
+
+  const msg = `${timestamp} [${level}] : ${message}${formattedMetadata}`;
+  return msg;
 });
 
 const logger = createLogger({
@@ -21,4 +24,5 @@ const logger = createLogger({
     new transports.Console({ level: 'info' })
   ]
 });
+
 module.exports = logger
