@@ -35,7 +35,7 @@ const deletPlan = async (req, res) => {
     try{
         const data = await redis.deletePlan(key)
         if(data){
-            res.status(200).json(data)
+            res.status(204).json(data)
         }else{
             res.status(404).json({"errorMessage": "Plan not found"})
         }
@@ -54,7 +54,6 @@ const getAllPlan = async (req, res) => {
     }catch(error){
         res.status(503)
     }
-    
 }
 
 module.exports = {
