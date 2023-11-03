@@ -1,6 +1,8 @@
 const logger = require("../../logger/logger")
 const schema = require("../../schemas/plan.schema.json")
 const validate = require('jsonschema').validate
+const authSerivce = require('../../services/auth')
+
 
 const validatePlan = async (req, res, next) => {
     logger.info("Validating the incoming JSON payload")
@@ -17,6 +19,27 @@ const validatePlan = async (req, res, next) => {
     next()
 }
 
+const tokenValidator = async (req, res, next) => {
+    logger.info("Validating the auth token")
+    const authorizationHeader = req.headers.authorization;
+    if (authorizationHeader && authorizationHeader.startsWith('Bearer ')) {
+        const token = authorizationHeader.split(' ')[1];
+        try {
+            const isTokenValid = await authSerivce.validateToken(token)
+            if(isTokenValid){
+                next()
+            }
+        } catch (error) {
+            res.status(401).json({ error: 'Authentication failed' });
+            logger.error("Authentication failed, ", error)
+        }
+    } else {
+        logger.error("Invalid bearer token: ", authorizationHeader)
+        res.status(401).json({ error: 'Invalid bearer token' });
+    }
+}
+
 module.exports ={
-    validatePlan: validatePlan
+    validatePlan: validatePlan,
+    tokenValidator: tokenValidator
 }

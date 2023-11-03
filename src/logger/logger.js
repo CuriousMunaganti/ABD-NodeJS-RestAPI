@@ -18,8 +18,7 @@ const logger = createLogger({
     format.colorize(),
     splat(),
     timestamp(),
-    customFormatter
-  ),
+    customFormatter),
   transports: [
     new transports.Console({ level: 'info' }),
   ]

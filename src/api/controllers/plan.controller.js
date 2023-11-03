@@ -1,4 +1,4 @@
-const redis = require('../../datastore/redis')
+const redis = require('../../services/redis')
 const logger = require('../../logger/logger')
 
 const getPlan = async (req, res) => {
