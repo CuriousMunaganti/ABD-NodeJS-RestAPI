@@ -1,9 +1,10 @@
+require('dotenv').config()
 const app = require('./src/app');
 const express = require('express')
 const logger = require('./src/logger/logger');
-const redisClient = require('./src/datastore/redis').client;
+const redisClient = require('./src/services/redis').client;
 app.use(express.json())
-const PORT = process.env.PORT || '8080'
+const PORT = process.env.APP_PORT || '8080'
 
 app.listen(PORT, () => {
     redisClient.connect().then(data => {

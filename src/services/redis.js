@@ -15,7 +15,6 @@ const getAllPlans = async () => {
 const getPlan = async (key) => {
     logger.info(`Getting data for ${key}`)
     try {
-        await pingClient();
         const data = await client.get(key);
         return JSON.parse(data)
     } catch (error) {
@@ -37,7 +36,6 @@ const setPlan = async (key, plan) => {
 
 const deletePlan = async (key) => {
     try {
-        await pingClient();
         const data = await client.del(key);
         return data;
     } catch (error) {
