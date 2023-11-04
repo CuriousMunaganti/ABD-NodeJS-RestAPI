@@ -12,7 +12,7 @@ const validatePlan = async (req, res, next) => {
             errorProperty: error.argument,
             errorMessage: error.message
         }));
-        logger.error("Incoming JSONSchema validation failed", formattedErrors)
+        logger.error("Incoming JSONSchema validation failed", {validationErrors: formattedErrors})
         res.status(400).json(formattedErrors)
         return
     }
