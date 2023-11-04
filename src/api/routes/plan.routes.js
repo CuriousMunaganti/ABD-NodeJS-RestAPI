@@ -7,6 +7,7 @@ plansRouter.get('/:id', plansController.getPlan);
 plansRouter.post('/', validatePlan, plansController.setPlan);
 plansRouter.delete('/:id', plansController.deletPlan);
 plansRouter.put('/:id', validatePlan, plansController.updatePlan);
+plansRouter.patch('/:id', plansController.addLinkedPlanServices);
 
 module.exports = {
     plansRouter
