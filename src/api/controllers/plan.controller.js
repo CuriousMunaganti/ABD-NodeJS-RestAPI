@@ -59,21 +59,54 @@ const getAllPlan = async (req, res) => {
 
 const updatePlan = async (req, res) => {
     const key = req.params.id
-    const receivedEtag = req.headers['if-match'];
-    const newEtag = etag(JSON.stringify(req.body))
-    if(receivedEtag === newEtag){
-        res.setHeader('ETag', newEtag)
-        res.status(304).send()
-        return
-    }
-
     try {
         const existingPlan = await redis.getPlan(key)
         if (existingPlan) {
+            const receivedEtag = req.headers['if-match'];
+            const newEtag = etag(JSON.stringify(existingPlan))
+            logger.info(`Etags ${receivedEtag}::${newEtag}`)
+            if (receivedEtag !== newEtag) {
+                res.setHeader('ETag', newEtag)
+                res.status(412).send()
+                return
+            }
+
             const data = await redis.setPlan(req.body.objectId, req.body)
             if (data === "OK") {
                 res.setHeader('ETag', etag(JSON.stringify(req.body)))
                 res.status(200).json(req.body)
+            }
+        } else {
+            res.status(404).json({ "errorMessage": "Plan not found" })
+        }
+    } catch (error) {
+        res.status(503).json({ "errorMessage": "Serive currently unavailable" })
+    }
+}
+
+const addLinkedPlanServices = async (req, res) => {
+    const key = req.params.id
+    try {
+        const existingPlan = await redis.getPlan(key)
+        if (existingPlan) {
+            const receivedEtag = req.headers['if-match'];
+            const newEtag = etag(JSON.stringify(existingPlan))
+            logger.info(`Etags ${receivedEtag}::${newEtag}`)
+            if (receivedEtag !== newEtag) {
+                res.setHeader('ETag', newEtag)
+                res.status(412).send()
+                return
+            }
+
+            const linkedPlanServices = req.body.linkedPlanServices
+            linkedPlanServices.forEach(linkedPlanService => {
+                existingPlan.linkedPlanServices.push(linkedPlanService)
+            });
+            
+            const data = await redis.setPlan(existingPlan.objectId, existingPlan)
+            if (data === "OK") {
+                res.setHeader('ETag', etag(JSON.stringify(existingPlan)))
+                res.status(200).json(existingPlan)
             }
         } else {
             res.status(404).json({ "errorMessage": "Plan not found" })
@@ -88,5 +121,6 @@ module.exports = {
     getPlan: getPlan,
     setPlan: setPlan,
     deletPlan: deletPlan,
-    updatePlan: updatePlan
+    updatePlan: updatePlan,
+    addLinkedPlanServices: addLinkedPlanServices
 };
