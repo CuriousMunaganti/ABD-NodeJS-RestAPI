@@ -21,6 +21,13 @@ const setPlan = async (req, res) => {
     logger.info(`Handling ${req.method} for ${req.originalUrl}`)
     logger.info(`Payload is, `, req.body)
     try {
+
+        const isPlanExists = await redis.getPlan(req.body.objectId)
+        if (isPlanExists) {
+            res.status(400).json({ "errorMessage": "Plan already exists" })
+            return
+        } 
+
         const data = await redis.setPlan(req.body.objectId, req.body)
         if (data === "OK") {
             res.status(201).json(req.body)
@@ -66,8 +73,7 @@ const updatePlan = async (req, res) => {
             const newEtag = etag(JSON.stringify(existingPlan))
             logger.info(`Etags ${receivedEtag}::${newEtag}`)
             if (receivedEtag !== newEtag) {
-                res.setHeader('ETag', newEtag)
-                res.status(412).send()
+                res.status(412).json({error: "Resource state might have changed or ETag might be wrong"})
                 return
             }
 
@@ -93,8 +99,7 @@ const addLinkedPlanServices = async (req, res) => {
             const newEtag = etag(JSON.stringify(existingPlan))
             logger.info(`Etags ${receivedEtag}::${newEtag}`)
             if (receivedEtag !== newEtag) {
-                res.setHeader('ETag', newEtag)
-                res.status(412).send()
+                res.status(412).json({error: "Resource state might have changed or ETag might be wrong"})
                 return
             }
 

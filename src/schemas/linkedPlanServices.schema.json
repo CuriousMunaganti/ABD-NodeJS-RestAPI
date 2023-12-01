@@ -4,6 +4,12 @@
     "title": "Generated schema for Root",
     "type": "object",
     "properties": {
+        "objectId": {
+            "type": "string"
+          },
+          "objectType": {
+            "type": "string"
+          },
         "linkedPlanServices": {
             "type": "array",
             "items": {
@@ -83,5 +89,6 @@
         "objectId",
         "objectType",
         "linkedPlanServices"
-    ]
+    ],
+    "additionalProperties": false
 }
