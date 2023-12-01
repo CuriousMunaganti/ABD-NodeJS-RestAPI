@@ -57,5 +57,6 @@ const tokenValidator = async (req, res, next) => {
 
 module.exports ={
     validatePlan: validatePlan,
-    tokenValidator: tokenValidator
+    tokenValidator: tokenValidator,
+    validateLinkedPlanServices: validateLinkedPlanServices
 }
