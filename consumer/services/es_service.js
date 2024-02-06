@@ -1,6 +1,6 @@
 const es_client = require("./../clients/elastic_search")
 
-const INDEX_NAME="plan-index";
+const INDEX_NAME="planindex";
 let MapOfDocuments = {};
 let listOfKeys = [];
 
